@@ -1,0 +1,41 @@
+# ============================
+# MediSpark .gitignore
+# ============================
+
+# --- Datasets (too large for GitHub — 1.2 GB) ---
+datasets/
+*.csv
+!quality_report.csv
+
+# --- sbt build artifacts ---
+medispark/target/
+medispark/project/target/
+medispark/project/project/
+
+# --- JAR files ---
+*.jar
+
+# --- Python artifacts ---
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+
+# --- IDE files ---
+.idea/
+.vscode/
+*.iml
+.bsp/
+
+# --- OS files ---
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# --- Logs ---
+*.log
+
+# --- Temp files ---
+*.tmp
+*.swp
+*~
