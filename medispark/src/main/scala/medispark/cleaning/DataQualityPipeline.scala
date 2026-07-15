@@ -43,6 +43,8 @@ object DataQualityPipeline {
     // .getOrCreate() either creates a new session or reuses an existing one
     val spark = SparkSession.builder()
       .appName("MediSpark-DataQualityPipeline")
+      // Tell Spark to use HDFS as the default filesystem (not local disk)
+      .config("spark.hadoop.fs.defaultFS", "hdfs://namenode:9000")
       .getOrCreate()
 
     // This import lets us use $ shorthand for column names, e.g. $"age"
@@ -135,6 +137,17 @@ object DataQualityPipeline {
       // For stroke, drop the "id" column — same reason
       if (disease == "stroke") {
         df = df.drop("id")
+      }
+
+      // ----- 3a-ii: Cast numeric columns to DoubleType -----
+      // Why: Some CSVs have "N/A" strings in numeric columns (e.g. bmi in stroke).
+      // Spark's inferSchema sees a mix of numbers and strings, so it picks StringType.
+      // We must cast them to Double so that median/IQR math works later.
+      // Casting "N/A" to Double produces null — which our null-handling step fixes.
+      for (c <- numCols) {
+        if (df.columns.contains(c)) {
+          df = df.withColumn(c, col(c).cast(DoubleType))
+        }
       }
 
       val originalCount = df.count()
