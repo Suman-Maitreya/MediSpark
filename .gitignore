@@ -39,3 +39,27 @@ desktop.ini
 *.tmp
 *.swp
 *~
+
+# --- IDE metadata ---
+.metals/
+.bloop/
+medispark/.metals/
+medispark/.bloop/
+medispark/project/.bloop/
+medispark/project/metals.sbt
+
+# --- Build logs ---
+sbt_assembly*.log
+stage*.log
+webapp_run.log
+medispark/logs/
+
+# --- LaTeX build artifacts ---
+*.aux
+*.nav
+*.out
+*.snm
+*.toc
+
+# --- Unrelated course files ---
+class_works/
