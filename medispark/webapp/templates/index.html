@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediSpark — Clinical Risk Engine</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<!-- TOP HEADER -->
+<header class="top-header">
+    <div class="logo">
+        <div class="logo-icon"><i class="fas fa-heartbeat"></i></div>
+        <div class="logo-text">Medi<span>Spark</span></div>
+    </div>
+    <div class="header-right">
+        <div class="mode-badge" id="modeBadge"><i class="fas fa-circle"></i> STANDALONE</div>
+        <div class="version">v2.0 — Spark 3.5.1 + Hadoop 3.2.1</div>
+    </div>
+</header>
+
+<!-- DOCK NAVIGATION -->
+<nav class="dock-container" id="dockContainer">
+    <div class="dock-panel" id="dockPanel">
+        <div class="dock-item active" data-section="dashboard" tabindex="0" role="button" aria-label="Dashboard">
+            <div class="dock-icon"><i class="fas fa-th-large"></i></div>
+            <div class="dock-label">Dashboard</div>
+        </div>
+        <div class="dock-item" data-section="streaming" tabindex="0" role="button" aria-label="Live Stream">
+            <div class="dock-icon"><i class="fas fa-wave-square"></i></div>
+            <div class="dock-label">Live Stream</div>
+        </div>
+        <div class="dock-item" data-section="calculator" tabindex="0" role="button" aria-label="Risk Calculator">
+            <div class="dock-icon"><i class="fas fa-calculator"></i></div>
+            <div class="dock-label">Risk Calculator</div>
+        </div>
+        <div class="dock-item" data-section="performance" tabindex="0" role="button" aria-label="Model Performance">
+            <div class="dock-icon"><i class="fas fa-chart-bar"></i></div>
+            <div class="dock-label">Performance</div>
+        </div>
+        <div class="dock-item" data-section="whatif" tabindex="0" role="button" aria-label="What-If Analysis">
+            <div class="dock-icon"><i class="fas fa-sliders-h"></i></div>
+            <div class="dock-label">What-If</div>
+        </div>
+        <div class="dock-item" data-section="xray" tabindex="0" role="button" aria-label="X-ray Analysis">
+            <div class="dock-icon"><i class="fas fa-x-ray"></i></div>
+            <div class="dock-label">X-ray</div>
+        </div>
+        <div class="dock-item" data-section="batch" tabindex="0" role="button" aria-label="Batch Predict">
+            <div class="dock-icon"><i class="fas fa-file-csv"></i></div>
+            <div class="dock-label">Batch Predict</div>
+        </div>
+    </div>
+</nav>
+
+<main class="content">
+
+<!-- DASHBOARD -->
+<section class="section active" id="sec-dashboard">
+    <div class="section-title"><i class="fas fa-th-large"></i> Dashboard</div>
+    <div class="section-desc">MediSpark distributed pipeline — 4 diseases, 2M+ records, 6 stages, real-time scoring.</div>
+    <div class="cards-row">
+        <div class="metric-card"><div class="card-icon" style="background:linear-gradient(135deg,#ff375f,#ff6b8a)"><i class="fas fa-heart"></i></div><div class="card-body"><div class="card-label">Heart Disease</div><div class="card-value" data-count="500000" data-suffix="">0</div><div class="card-sub">UCI + SMOTE augmented</div></div></div>
+        <div class="metric-card"><div class="card-icon" style="background:linear-gradient(135deg,#ff9500,#ffb347)"><i class="fas fa-droplet"></i></div><div class="card-body"><div class="card-label">Diabetes</div><div class="card-value" data-count="500000" data-suffix="">0</div><div class="card-sub">Pima + SMOTE augmented</div></div></div>
+        <div class="metric-card"><div class="card-icon" style="background:linear-gradient(135deg,#bf5af2,#d88aff)"><i class="fas fa-brain"></i></div><div class="card-body"><div class="card-label">Stroke</div><div class="card-value" data-count="500000" data-suffix="">0</div><div class="card-sub">SMOTE augmented</div></div></div>
+        <div class="metric-card"><div class="card-icon" style="background:linear-gradient(135deg,#30d158,#6bd68d)"><i class="fas fa-lungs"></i></div><div class="card-body"><div class="card-label">Lung Cancer</div><div class="card-value" data-count="500000" data-suffix="">0</div><div class="card-sub">SMOTE augmented</div></div></div>
+        <div class="metric-card"><div class="card-icon" style="background:linear-gradient(135deg,#5ac8fa,#8dd9fb)"><i class="fas fa-x-ray"></i></div><div class="card-body"><div class="card-label">Chest X-rays</div><div class="card-value" data-count="5606" data-suffix="">0</div><div class="card-sub">NIH ChestX-ray14 sample</div></div></div>
+        <div class="metric-card"><div class="card-icon" style="background:linear-gradient(135deg,#0a84ff,#4da6ff)"><i class="fas fa-database"></i></div><div class="card-body"><div class="card-label">Total Records</div><div class="card-value" data-count="2005606" data-suffix="">0</div><div class="card-sub">Tabular + image datasets</div></div></div>
+        <div class="metric-card"><div class="card-icon" style="background:linear-gradient(135deg,#00d4aa,#33e0be)"><i class="fas fa-microchip"></i></div><div class="card-body"><div class="card-label">Pipeline Stages</div><div class="card-value" data-count="7" data-suffix="">0</div><div class="card-sub">All Scala + Spark</div></div></div>
+    </div>
+    <div class="panel">
+        <div class="panel-title"><i class="fas fa-project-diagram"></i> Pipeline Architecture</div>
+        <div class="pipeline-stages">
+            <div class="stage-card"><div class="stage-check"><i class="fas fa-check-circle"></i></div><div class="stage-num">Stage 1</div><div class="stage-name">Ingest</div><div class="stage-desc">CSV, JSON, Parquet → HDFS</div></div>
+            <div class="stage-card"><div class="stage-check"><i class="fas fa-check-circle"></i></div><div class="stage-num">Stage 2</div><div class="stage-name">Clean</div><div class="stage-desc">Nulls, outliers, types</div></div>
+            <div class="stage-card"><div class="stage-check"><i class="fas fa-check-circle"></i></div><div class="stage-num">Stage 3</div><div class="stage-name">Features</div><div class="stage-desc">VectorAssembler + scale</div></div>
+            <div class="stage-card"><div class="stage-check"><i class="fas fa-check-circle"></i></div><div class="stage-num">Stage 4</div><div class="stage-name">Train</div><div class="stage-desc">RandomForest × 4</div></div>
+            <div class="stage-card"><div class="stage-check"><i class="fas fa-check-circle"></i></div><div class="stage-num">Stage 5</div><div class="stage-name">Stream</div><div class="stage-desc">Structured Streaming</div></div>
+            <div class="stage-card"><div class="stage-check"><i class="fas fa-check-circle"></i></div><div class="stage-num">Stage 6</div><div class="stage-name">Evaluate</div><div class="stage-desc">Metrics + confusion</div></div>
+            <div class="stage-card"><div class="stage-check"><i class="fas fa-check-circle"></i></div><div class="stage-num">Stage 7</div><div class="stage-name">X-ray</div><div class="stage-desc">Image classification</div></div>
+        </div>
+    </div>
+    <div class="panel">
+        <div class="panel-title"><i class="fas fa-cubes"></i> Big Data 5V's Mapping</div>
+        <div class="five-vs">
+            <div class="v-card"><div class="v-icon"><i class="fas fa-layer-group"></i></div><h4>Volume</h4><p>2M+ records across 5 datasets + 11K chest X-ray images in HDFS</p></div>
+            <div class="v-card"><div class="v-icon"><i class="fas fa-tachometer-alt"></i></div><h4>Velocity</h4><p>Structured Streaming micro-batches for real-time scoring</p></div>
+            <div class="v-card"><div class="v-icon"><i class="fas fa-shapes"></i></div><h4>Variety</h4><p>CSV, JSON, Parquet, PNG — multi-format ingestion pipeline</p></div>
+            <div class="v-card"><div class="v-icon"><i class="fas fa-shield-alt"></i></div><h4>Veracity</h4><p>Null handling, outlier removal, type validation</p></div>
+            <div class="v-card"><div class="v-icon"><i class="fas fa-chart-line"></i></div><h4>Value</h4><p>Actionable clinical risk predictions with explainability</p></div>
+        </div>
+    </div>
+    <div class="panel">
+        <div class="panel-title"><i class="fas fa-chart-bar"></i> Dataset Size Comparison</div>
+        <div class="chart-wrap"><canvas id="dashboardChart"></canvas></div>
+    </div>
+</section>
+
+<!-- LIVE STREAMING -->
+<section class="section" id="sec-streaming">
+    <div class="section-title"><i class="fas fa-wave-square"></i> Live Stream</div>
+    <div class="section-desc">Real-time patient risk scoring — synthetic patients generated every 5 seconds.</div>
+    <div class="streaming-controls">
+        <button class="btn btn-primary" id="btnStartStream" onclick="startStream()"><i class="fas fa-play"></i> Start</button>
+        <button class="btn btn-danger" id="btnStopStream" onclick="stopStream()" disabled><i class="fas fa-stop"></i> Stop</button>
+        <span class="stream-status" id="streamStatus"><i class="fas fa-circle"></i> Idle</span>
+        <span class="patient-count" id="patientCount">0 patients</span>
+    </div>
+    <div class="panel-row">
+        <div class="panel"><div class="panel-title"><i class="fas fa-chart-pie"></i> Risk Distribution</div><div class="chart-wrap sm"><canvas id="liveDistChart"></canvas></div></div>
+        <div class="panel"><div class="panel-title"><i class="fas fa-chart-line"></i> Risk Trend</div><div class="chart-wrap"><canvas id="riskTrendChart"></canvas></div></div>
+    </div>
+    <div class="panel"><div class="panel-title"><i class="fas fa-list"></i> Patient Feed</div><div class="patient-feed" id="patientFeed"><div class="placeholder">Press Start to begin streaming...</div></div></div>
+</section>
+
+<!-- RISK CALCULATOR -->
+<section class="section" id="sec-calculator">
+    <div class="section-title"><i class="fas fa-calculator"></i> Risk Calculator</div>
+    <div class="section-desc">Enter patient parameters for multi-disease risk prediction with explainability.</div>
+    <div class="panel-row">
+        <div class="panel">
+            <div class="panel-title"><i class="fas fa-user-edit"></i> Patient Parameters</div>
+            <div class="form-grid">
+                <div class="form-group"><label>Age</label><input type="number" id="calcAge" value="55" min="1" max="120"></div>
+                <div class="form-group"><label>Gender</label><select id="calcGender"><option value="1">Male</option><option value="0">Female</option></select></div>
+                <div class="form-group"><label>BMI</label><input type="number" id="calcBMI" value="28.5" step="0.1"></div>
+                <div class="form-group"><label>Blood Pressure</label><input type="number" id="calcBP" value="135"></div>
+                <div class="form-group"><label>Cholesterol</label><input type="number" id="calcChol" value="220"></div>
+                <div class="form-group"><label>Glucose</label><input type="number" id="calcGlucose" value="110"></div>
+                <div class="form-group"><label>Smoking</label><select id="calcSmoking"><option value="0">No</option><option value="1">Yes</option></select></div>
+                <div class="form-group"><label>Exercise (hrs/wk)</label><input type="number" id="calcExercise" value="2" step="0.5"></div>
+            </div>
+            <button class="btn btn-primary btn-full" onclick="calcPredict()"><i class="fas fa-search"></i> Predict Risk</button>
+            <button class="btn btn-success btn-full" onclick="downloadPDF()" id="btnPDF" disabled><i class="fas fa-file-pdf"></i> Export PDF</button>
+        </div>
+        <div>
+            <div class="panel"><div class="panel-title"><i class="fas fa-heartbeat"></i> Risk Results</div><div class="calc-results" id="calcResults"><div class="placeholder">Enter parameters and click Predict</div></div></div>
+        </div>
+    </div>
+    <div class="panel" id="explainPanel" style="display:none"><div class="panel-title"><i class="fas fa-search-plus"></i> SHAP-Style Explainability</div><div class="explain-grid" id="explainGrid"></div></div>
+</section>
+
+<!-- MODEL PERFORMANCE -->
+<section class="section" id="sec-performance">
+    <div class="section-title"><i class="fas fa-chart-bar"></i> Model Performance</div>
+    <div class="section-desc">Stage 6 & 7 evaluation — per-disease metrics from RandomForest classifiers on 500K rows.</div>
+    <div class="disease-tabs" id="diseaseTabs">
+        <button class="disease-tab active" data-disease="heart" onclick="showDisease('heart')"><i class="fas fa-heart"></i> Heart</button>
+        <button class="disease-tab" data-disease="diabetes" onclick="showDisease('diabetes')"><i class="fas fa-droplet"></i> Diabetes</button>
+        <button class="disease-tab" data-disease="stroke" onclick="showDisease('stroke')"><i class="fas fa-brain"></i> Stroke</button>
+        <button class="disease-tab" data-disease="lung_cancer" onclick="showDisease('lung_cancer')"><i class="fas fa-lungs"></i> Lung Cancer</button>
+        <button class="disease-tab" data-disease="xray" onclick="showDisease('xray')"><i class="fas fa-x-ray"></i> X-ray</button>
+    </div>
+    <div class="cards-row" id="perfCards"></div>
+    <div class="panel-row">
+        <div class="panel"><div class="panel-title"><i class="fas fa-chart-bar"></i> Feature Importance</div><div class="chart-wrap"><canvas id="featureChart"></canvas></div></div>
+        <div class="panel"><div class="panel-title"><i class="fas fa-chart-bar"></i> Per-Class Metrics</div><div class="chart-wrap"><canvas id="classChart"></canvas></div></div>
+    </div>
+    <div class="panel"><div class="panel-title"><i class="fas fa-table"></i> Confusion Matrix</div><div id="confusionMatrix"></div></div>
+</section>
+
+<!-- WHAT-IF -->
+<section class="section" id="sec-whatif">
+    <div class="section-title"><i class="fas fa-sliders-h"></i> What-If Analysis</div>
+    <div class="section-desc">Adjust parameters and watch risk scores change in real time.</div>
+    <div class="panel-row">
+        <div class="panel">
+            <div class="panel-title"><i class="fas fa-sliders-h"></i> Parameters</div>
+            <div class="whatif-controls">
+                <div class="slider-group"><label>Age <span id="wiAgeVal">50</span></label><input type="range" id="wiAge" min="18" max="90" value="50" oninput="updateWhatIf()"></div>
+                <div class="slider-group"><label>BMI <span id="wiBmiVal">25</span></label><input type="range" id="wiBmi" min="15" max="50" value="25" step="0.5" oninput="updateWhatIf()"></div>
+                <div class="slider-group"><label>Blood Pressure <span id="wiBpVal">120</span></label><input type="range" id="wiBp" min="80" max="220" value="120" oninput="updateWhatIf()"></div>
+                <div class="slider-group"><label>Cholesterol <span id="wiCholVal">200</span></label><input type="range" id="wiChol" min="100" max="350" value="200" oninput="updateWhatIf()"></div>
+                <div class="slider-group"><label>Glucose <span id="wiGlucVal">100</span></label><input type="range" id="wiGluc" min="50" max="250" value="100" oninput="updateWhatIf()"></div>
+                <div class="toggle-row">
+                    <div class="toggle-group"><label>Smoking</label><select id="wiSmoke" onchange="updateWhatIf()"><option value="0">No</option><option value="1">Yes</option></select></div>
+                    <div class="toggle-group"><label>Gender</label><select id="wiGender" onchange="updateWhatIf()"><option value="1">Male</option><option value="0">Female</option></select></div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="panel"><div class="panel-title"><i class="fas fa-bullseye"></i> Risk Radar</div><div class="chart-wrap"><canvas id="whatifRadar"></canvas></div></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
+                <div class="whatif-gauge" id="gaugeHeart"><div class="gauge-label">Heart</div><div class="gauge-value" style="color:var(--heart)">—</div><div class="gauge-level">—</div></div>
+                <div class="whatif-gauge" id="gaugeDiabetes"><div class="gauge-label">Diabetes</div><div class="gauge-value" style="color:var(--diabetes)">—</div><div class="gauge-level">—</div></div>
+                <div class="whatif-gauge" id="gaugeStroke"><div class="gauge-label">Stroke</div><div class="gauge-value" style="color:var(--stroke)">—</div><div class="gauge-level">—</div></div>
+                <div class="whatif-gauge" id="gaugeLung"><div class="gauge-label">Lung Cancer</div><div class="gauge-value" style="color:var(--lung)">—</div><div class="gauge-level">—</div></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- X-RAY ANALYSIS -->
+<section class="section" id="sec-xray">
+    <div class="section-title"><i class="fas fa-x-ray"></i> Chest X-ray Analysis</div>
+    <div class="section-desc">Upload a chest X-ray image for Normal vs Abnormal classification using Spark-trained RandomForest.</div>
+    <div class="panel-row">
+        <div class="panel">
+            <div class="panel-title"><i class="fas fa-upload"></i> Upload X-ray Image</div>
+            <div class="xray-upload-area" id="xrayDropZone" onclick="document.getElementById('xrayFile').click()">
+                <input type="file" id="xrayFile" accept=".png,.jpg,.jpeg" style="display:none" onchange="handleXray(this)">
+                <div id="xrayPreviewArea">
+                    <i class="fas fa-x-ray" style="font-size:48px;color:var(--text-muted);margin-bottom:12px;display:block"></i>
+                    <div style="font-size:14px;font-weight:700;color:var(--text-sec)">Drop chest X-ray here or click to browse</div>
+                    <div style="font-size:11px;color:var(--text-muted);margin-top:6px">Accepts PNG / JPG — NIH ChestX-ray14 format</div>
+                </div>
+            </div>
+            <div id="xrayStatus" style="margin-top:12px"></div>
+        </div>
+        <div>
+            <div class="panel" id="xrayResultPanel" style="display:none">
+                <div class="panel-title"><i class="fas fa-diagnoses"></i> Classification Result</div>
+                <div id="xrayResult"></div>
+            </div>
+            <div class="panel" id="xrayFeaturesPanel" style="display:none">
+                <div class="panel-title"><i class="fas fa-microscope"></i> Extracted Features</div>
+                <div id="xrayFeatures" style="max-height:320px;overflow-y:auto"></div>
+            </div>
+        </div>
+    </div>
+    <div class="panel">
+        <div class="panel-title"><i class="fas fa-info-circle"></i> How It Works</div>
+        <div class="pipeline-stages">
+            <div class="stage-card"><div class="stage-check"><i class="fas fa-image" style="color:var(--accent)"></i></div><div class="stage-num">Step 1</div><div class="stage-name">Load Image</div><div class="stage-desc">Resize to 64×64 grayscale</div></div>
+            <div class="stage-card"><div class="stage-check"><i class="fas fa-cogs" style="color:var(--accent)"></i></div><div class="stage-num">Step 2</div><div class="stage-name">Extract Features</div><div class="stage-desc">27 pixel statistics + histogram</div></div>
+            <div class="stage-card"><div class="stage-check"><i class="fas fa-project-diagram" style="color:var(--accent)"></i></div><div class="stage-num">Step 3</div><div class="stage-name">Classify</div><div class="stage-desc">Spark-trained RandomForest</div></div>
+            <div class="stage-card"><div class="stage-check"><i class="fas fa-check-circle" style="color:var(--accent)"></i></div><div class="stage-num">Step 4</div><div class="stage-name">Result</div><div class="stage-desc">Normal / Abnormal + confidence</div></div>
+        </div>
+    </div>
+</section>
+
+<!-- BATCH PREDICT -->
+<section class="section" id="sec-batch">
+    <div class="section-title"><i class="fas fa-file-csv"></i> Batch Predict</div>
+    <div class="section-desc">Upload a CSV for bulk risk prediction across all 4 disease models.</div>
+    <div class="panel">
+        <div class="panel-title"><i class="fas fa-upload"></i> Upload CSV</div>
+        <div class="batch-upload-area" id="batchDropZone" onclick="document.getElementById('batchFile').click()">
+            <input type="file" id="batchFile" accept=".csv" style="display:none" onchange="handleBatch(this)">
+            <i class="fas fa-cloud-upload-alt" style="font-size:32px;color:var(--text-muted);margin-bottom:10px;display:block"></i>
+            <div style="font-size:14px;font-weight:700;color:var(--text-sec)">Drop CSV here or click to browse</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:6px">Required: age, gender, bmi, blood_pressure, cholesterol, glucose, smoking</div>
+        </div>
+        <div id="batchStatus"></div>
+    </div>
+    <div class="panel" id="batchResultsPanel" style="display:none"><div class="panel-title"><i class="fas fa-table"></i> Results</div><div style="overflow-x:auto" id="batchResultsTable"></div></div>
+</section>
+
+</main>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
